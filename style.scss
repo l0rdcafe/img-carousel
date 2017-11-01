@@ -1,0 +1,44 @@
+.xcentered {
+  margin: auto;
+  display: block;
+}
+
+#carousel-wrapper {
+  border: 1px solid red;
+  height: 70vh;
+  width: 60%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+
+.dots {
+  border-radius: 50%;
+  height: 14px;
+  width: 14px;
+  border: 1px solid green;
+  display: inline-block;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: green;
+  }
+}
+
+.active {
+  background-color: green;
+}
+
+ul {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: 70%;
+  -ms-flex-item-align: center;
+  align-self: center;
+}
