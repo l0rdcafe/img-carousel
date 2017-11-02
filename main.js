@@ -1,6 +1,7 @@
 var model = {};
 var view = {};
 var handlers = {};
+var timer;
 
 model.state = {
   imgSrcs: ['images/banner_large.jpg', 'images/img.png', 'images/duck.jpg'],
@@ -74,25 +75,38 @@ handlers.mouseOnArrows = function () {
 handlers.imgSlide = function () {
   var imgTransSpeed = model.state.imgTransSpeed;
   model.next();
-  setInterval(model.next, imgTransSpeed);
+  timer = setInterval(model.next, imgTransSpeed);
 };
 
 handlers.clickDot = function () {
   var dotClicked = function (e) {
+    var imgTransSpeed = model.state.imgTransSpeed;
+    clearInterval(timer);
     model.state.numImgs = parseInt(e.target.parentNode.id, 10);
     view.drawImg(model.state.imgSrcs[model.state.numImgs]);
     view.colorDot(model.state.numImgs);
+    timer = setInterval(model.next, imgTransSpeed);
   };
 
   $('#nav .dots').on('click', dotClicked);
 };
 
 handlers.clickNext = function () {
-  $('#right i').on('click', model.next);
+  $('#right i').on('click', function () {
+    var imgTransSpeed = model.state.imgTransSpeed;
+    clearInterval(timer);
+    model.next();
+    timer = setInterval(model.next, imgTransSpeed);
+  });
 };
 
 handlers.clickPrev = function () {
-  $('#left i').on('click', model.previous);
+  $('#left i').on('click', function () {
+    var imgTransSpeed = model.state.imgTransSpeed;
+    clearInterval(timer);
+    model.previous();
+    timer = setInterval(model.next, imgTransSpeed);
+  });
 };
 
 $(document).ready(function () {
