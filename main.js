@@ -18,7 +18,6 @@ model.next = function () {
 
   if (model.state.imgIndx < 0) {
     i += imgSrcs.length;
-    i %= imgSrcs.length;
   }
 
   view.drawImg(model.state.imgSrcs[i]);
@@ -34,7 +33,6 @@ model.previous = function () {
 
   if (model.state.imgIndx < 0) {
     i += imgSrcs.length;
-    i %= imgSrcs.length;
   }
 
   view.drawImg(model.state.imgSrcs[i]);
@@ -101,7 +99,6 @@ handlers.clickDot = function () {
 
 handlers.clickNext = function () {
   $('#right i').on('click', function () {
-    debugger;
     var imgTransSpeed = model.state.imgTransSpeed;
     clearInterval(timer);
     model.next();
