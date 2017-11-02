@@ -5,32 +5,41 @@ var timer;
 
 model.state = {
   imgSrcs: ['images/banner_large.jpg', 'images/img.png', 'images/duck.jpg'],
-  numImgs: 0,
+  imgIndx: 0,
   transitionSpeed: 500,
   imgTransSpeed: 5000
 };
 
 model.next = function () {
   var imgSrcs = model.state.imgSrcs;
-  var i = model.state.numImgs % imgSrcs.length;
+  var i;
+  model.state.imgIndx += 1;
+  i = model.state.imgIndx % imgSrcs.length;
 
-  view.drawImg(model.state.imgSrcs[i]);
-  view.colorDot(i);
-  model.state.numImgs += 1;
-};
-
-model.previous = function () {
-  var imgSrcs = model.state.imgSrcs;
-  var i = model.state.numImgs % imgSrcs.length;
-
-  if (model.state.numImgs < 0) {
+  if (model.state.imgIndx < 0) {
     i += imgSrcs.length;
     i %= imgSrcs.length;
   }
 
   view.drawImg(model.state.imgSrcs[i]);
   view.colorDot(i);
-  model.state.numImgs -= 1;
+  console.log(i);
+};
+
+model.previous = function () {
+  var imgSrcs = model.state.imgSrcs;
+  var i;
+  model.state.imgIndx -= 1;
+  i = model.state.imgIndx % imgSrcs.length;
+
+  if (model.state.imgIndx < 0) {
+    i += imgSrcs.length;
+    i %= imgSrcs.length;
+  }
+
+  view.drawImg(model.state.imgSrcs[i]);
+  view.colorDot(i);
+  console.log(i);
 };
 
 view.drawDots = function () {
@@ -72,19 +81,18 @@ handlers.mouseOnArrows = function () {
   $('.arrows').on('mouseover', drawArrows);
 };
 
-handlers.imgSlide = function () {
-  var imgTransSpeed = model.state.imgTransSpeed;
-  model.next();
-  timer = setInterval(model.next, imgTransSpeed);
+handlers.imgSlide = function (speed) {
+  timer = setInterval(model.next, speed);
 };
 
 handlers.clickDot = function () {
   var dotClicked = function (e) {
     var imgTransSpeed = model.state.imgTransSpeed;
     clearInterval(timer);
-    model.state.numImgs = parseInt(e.target.parentNode.id, 10);
-    view.drawImg(model.state.imgSrcs[model.state.numImgs]);
-    view.colorDot(model.state.numImgs);
+    model.state.imgIndx = parseInt(e.target.parentNode.id, 10);
+    view.drawImg(model.state.imgSrcs[model.state.imgIndx]);
+    view.colorDot(model.state.imgIndx);
+    console.log(model.state.imgIndx);
     timer = setInterval(model.next, imgTransSpeed);
   };
 
@@ -93,6 +101,7 @@ handlers.clickDot = function () {
 
 handlers.clickNext = function () {
   $('#right i').on('click', function () {
+    debugger;
     var imgTransSpeed = model.state.imgTransSpeed;
     clearInterval(timer);
     model.next();
@@ -110,9 +119,11 @@ handlers.clickPrev = function () {
 };
 
 $(document).ready(function () {
+  view.drawImg(model.state.imgSrcs[0]);
   view.drawDots();
+  view.colorDot(0);
   handlers.mouseOnArrows();
-  handlers.imgSlide();
+  handlers.imgSlide(model.state.imgTransSpeed);
   handlers.clickNext();
   handlers.clickPrev();
   handlers.clickDot();
