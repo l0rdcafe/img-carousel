@@ -4,29 +4,32 @@ var handlers = {};
 
 model.state = {
   imgSrcs: ['images/banner_large.jpg', 'images/img.png', 'images/duck.jpg'],
-  imgCount: 0,
+  numImgs: 0,
   transitionSpeed: 500,
   imgTransSpeed: 5000
 };
 
 model.next = function () {
   var imgSrcs = model.state.imgSrcs;
-  if (model.state.imgCount < (imgSrcs.length - 1)) {
-    model.state.imgCount += 1;
-  } else {
-    model.state.imgCount = 0;
-  }
-  view.drawImg(model.state.imgCount);
+  var i = model.state.numImgs % imgSrcs.length;
+
+  view.drawImg(model.state.imgSrcs[i]);
+  view.colorDot(i);
+  model.state.numImgs += 1;
 };
 
 model.previous = function () {
   var imgSrcs = model.state.imgSrcs;
-  if (model.state.imgCount > 0) {
-    model.state.imgCount -= 1;
-  } else {
-    model.state.imgCount = imgSrcs.length - 1;
+  var i = model.state.numImgs % imgSrcs.length;
+
+  if (model.state.numImgs < 0) {
+    i += imgSrcs.length;
+    i %= imgSrcs.length;
   }
-  view.drawImg(model.state.imgCount);
+
+  view.drawImg(model.state.imgSrcs[i]);
+  view.colorDot(i);
+  model.state.numImgs -= 1;
 };
 
 view.drawDots = function () {
@@ -45,19 +48,58 @@ view.drawDots = function () {
   $('#' + (imgSrcs.length - 1)).css({ "margin-right": 0 });
 };
 
-view.drawImg = function (i) {
-  var imgSrcs = model.state.imgSrcs;
+view.drawImg = function (src) {
   var transSpeed = model.state.transitionSpeed;
-  $('#carousel-wrapper').css({ "background-image": "url(" + imgSrcs[i] + ")" }).hide().fadeIn(transSpeed);
+  $('#carousel-wrapper').css({ "background-image": "url(" + src + ")" }).hide().fadeIn(transSpeed);
+};
+
+view.colorDot = function (i) {
+  $('.dots').removeClass('active');
+  $('#' + i + ' .dots').addClass('active');
+};
+
+handlers.mouseOnArrows = function () {
+  var drawArrows = function () {
+    $('.arrows i').fadeIn(500);
+  };
+  var hideArrows = function () {
+    $('.arrows i').fadeOut(400);
+  };
+
+  hideArrows();
+  $('#carousel-wrapper').on('mouseleave', hideArrows);
+  $('.arrows').on('mouseover', drawArrows);
 };
 
 handlers.imgSlide = function () {
   var imgTransSpeed = model.state.imgTransSpeed;
+  model.next();
   setInterval(model.next, imgTransSpeed);
+};
+
+handlers.clickDot = function () {
+  var dotClicked = function (e) {
+    model.state.numImgs = parseInt(e.target.parentNode.id, 10);
+    view.drawImg(model.state.imgSrcs[model.state.numImgs]);
+    view.colorDot(model.state.numImgs);
+  };
+
+  $('#nav .dots').on('click', dotClicked);
+};
+
+handlers.clickNext = function () {
+  $('#right i').on('click', model.next);
+};
+
+handlers.clickPrev = function () {
+  $('#left i').on('click', model.previous);
 };
 
 $(document).ready(function () {
   view.drawDots();
-  view.drawImg(model.state.imgCount);
+  handlers.mouseOnArrows();
   handlers.imgSlide();
+  handlers.clickNext();
+  handlers.clickPrev();
+  handlers.clickDot();
 });
