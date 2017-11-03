@@ -12,30 +12,30 @@ model.state = {
 };
 
 model.next = function () {
-  var imgSrcs = model.state.imgSrcs;
+  var imgSrcs = this.state.imgSrcs;
   var i;
-  model.state.imgIndx += 1;
-  i = model.state.imgIndx % imgSrcs.length;
+  this.state.imgIndx += 1;
+  i = this.state.imgIndx % imgSrcs.length;
 
-  if (model.state.imgIndx < 0) {
+  if (this.state.imgIndx < 0) {
     i += imgSrcs.length;
   }
 
-  view.drawImg(model.state.imgSrcs[i]);
+  view.drawImg(this.state.imgSrcs[i]);
   view.colorDot(i);
 };
 
 model.previous = function () {
-  var imgSrcs = model.state.imgSrcs;
+  var imgSrcs = this.state.imgSrcs;
   var i;
-  model.state.imgIndx -= 1;
-  i = model.state.imgIndx % imgSrcs.length;
+  this.state.imgIndx -= 1;
+  i = this.state.imgIndx % imgSrcs.length;
 
-  if (model.state.imgIndx < 0) {
+  if (this.state.imgIndx < 0) {
     i += imgSrcs.length;
   }
 
-  view.drawImg(model.state.imgSrcs[i]);
+  view.drawImg(this.state.imgSrcs[i]);
   view.colorDot(i);
 };
 
