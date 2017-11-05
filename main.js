@@ -4,34 +4,33 @@ var handlers = {};
 var timer;
 
 model.state = {
-  imgSrcs: ['images/banner_large.jpg', 'images/img.png', 'images/duck.jpg'],
+  imgSrcs: ['images/rocks.jpg', 'images/lark.jpg', 'images/christian.jpg'],
   imgIndx: 0,
   transitionSpeed: 500,
-  imgTransSpeed: 5000,
-  setTimeoutSpeed: 3000
+  imgTransSpeed: 5000
 };
 
 model.next = function () {
-  var imgSrcs = this.state.imgSrcs;
+  var imgSrcs = model.state.imgSrcs;
   var i;
-  this.state.imgIndx += 1;
-  i = this.state.imgIndx % imgSrcs.length;
+  model.state.imgIndx += 1;
+  i = model.state.imgIndx % imgSrcs.length;
 
-  if (this.state.imgIndx < 0) {
+  if (model.state.imgIndx < 0) {
     i += imgSrcs.length;
   }
 
-  view.drawImg(this.state.imgSrcs[i]);
+  view.drawImg(model.state.imgSrcs[i]);
   view.colorDot(i);
 };
 
 model.previous = function () {
-  var imgSrcs = this.state.imgSrcs;
+  var imgSrcs = model.state.imgSrcs;
   var i;
-  this.state.imgIndx -= 1;
-  i = this.state.imgIndx % imgSrcs.length;
+  model.state.imgIndx -= 1;
+  i = model.state.imgIndx % imgSrcs.length;
 
-  if (this.state.imgIndx < 0) {
+  if (model.state.imgIndx < 0) {
     i += imgSrcs.length;
   }
 
